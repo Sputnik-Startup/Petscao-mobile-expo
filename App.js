@@ -1,16 +1,23 @@
-import * as React from "react";
-import { View, Text } from "react-native";
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
 
-export default function App() {
+import { UserProvider } from "./src/contexts/UserContext";
+import MainStack from "./src/stacks/MainStack";
+import { StatusBar } from "expo-status-bar";
+import { NotificationProvider } from "./src/contexts/NotificationContext";
+import { LogBox } from "react-native";
+
+LogBox.ignoreLogs(["Possible Unhandled Promise Rejection"]);
+//Retornar JSX
+export default () => {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>Universal React with Expo</Text>
-    </View>
+    <NavigationContainer>
+      <UserProvider>
+        <NotificationProvider>
+          <StatusBar backgroundColor="#fb6340" translucent={false} />
+          <MainStack />
+        </NotificationProvider>
+      </UserProvider>
+    </NavigationContainer>
   );
-}
+};

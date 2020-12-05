@@ -1,0 +1,28 @@
+{
+  "android": {
+    "splash":{
+      "statusBar": {
+        "visible": true,
+        "barStyle": "dark-content",
+        "backgroundColor": "#FFFFFF"
+      }
+    }
+  },
+  "expo": {
+    "name": "Petscão",
+    "icon": "./src/assets/icon.png",
+    "version": "1.0.0",
+    "slug": "petscao-mobile",
+    "ios": {
+      "bundleIdentifier": "com.sputnik.petscao",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "com.sputnik.petscao",
+      "versionCode": 1
+    },
+    "splash": {
+      "image": "./src/assets/splash.png"
+    }
+  }
+}
