@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { Alert, Modal, View, Text } from "react-native";
-import AsyncStorage from "@react-native-community/async-storage";
-import Icon from "react-native-vector-icons/FontAwesome5";
+import React, { useState, useEffect, useCallback } from 'react';
+import { Alert, Modal, View, Text } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import {
   Container,
   ScrollView,
@@ -12,13 +12,14 @@ import {
   ModalView,
   ModalTitle,
   ModalButton,
-} from "./styles";
+} from './styles';
 
-import { api } from "../../services/api";
+import { api } from '../../services/api';
 
-import AppointmentItem from "../../components/AppointmentItem";
-import Loader from "../../components/Loader";
-import { useFocusEffect } from "@react-navigation/native";
+import AppointmentItem from '../../components/AppointmentItem';
+import Loader from '../../components/Loader';
+import { useFocusEffect } from '@react-navigation/native';
+import Skeleton from './skeleton';
 
 export default function Appointment({ navigation, route }) {
   const appointmentParam = route.params?.appointment;
@@ -37,11 +38,11 @@ export default function Appointment({ navigation, route }) {
 
   useEffect(() => {
     (async () => {
-      const token = await AsyncStorage.getItem("PC_TOKEN");
+      const token = await AsyncStorage.getItem('PC_TOKEN');
       try {
         const response = await api({
-          method: "get",
-          url: "/customer/appointment",
+          method: 'get',
+          url: '/customer/appointment',
           headers: {
             authorization: `Bearer ${token}`,
           },
@@ -56,7 +57,7 @@ export default function Appointment({ navigation, route }) {
   }, []);
 
   const handleClick = (id) => {
-    navigation.navigate("NewAppointment", {
+    navigation.navigate('NewAppointment', {
       id,
     });
   };
@@ -72,21 +73,19 @@ export default function Appointment({ navigation, route }) {
   };
 
   const handleDeleteAppointment = async () => {
-    const token = await AsyncStorage.getItem("PC_TOKEN");
+    const token = await AsyncStorage.getItem('PC_TOKEN');
     try {
       api({
-        method: "delete",
+        method: 'delete',
         url: `/customer/appointment/${selectedAppointment}`,
         headers: {
           authorization: `Bearer ${token}`,
         },
       });
 
-      // if (appointment.cancelable) {
-      // }
-        setAppointment((state) =>
-          state.filter((app) => app.id !== selectedAppointment)
-        );
+      setAppointment((state) =>
+        state.filter((app) => app.id !== selectedAppointment)
+      );
       closeModal();
     } catch (error) {}
   };
@@ -94,32 +93,36 @@ export default function Appointment({ navigation, route }) {
   return (
     <Container>
       <ViewButtonAdd>
-        <ButtonNewAppoint onPress={() => handleClick("vazio")}>
+        <ButtonNewAppoint onPress={() => handleClick('vazio')}>
           <Icon name="plus" size={13} color="#fb6340" />
           <TextButton>Novo Agendamento</TextButton>
         </ButtonNewAppoint>
       </ViewButtonAdd>
-      {loading && <Loader />}
-      <ScrollView
-        contentContainerStyle={{
-          width: "100%",
-          padding: 15,
-          alignItems: "center",
-        }}
-      >
-        {appointment.map((app, index) => (
-          <AppointmentItem
-            appointment={app}
-            key={index}
-            onPress={() => openModal(app.id)}
-          />
-        ))}
-      </ScrollView>
+      {loading ? (
+        <Skeleton />
+      ) : (
+        <ScrollView
+          contentContainerStyle={{
+            width: '100%',
+            padding: 15,
+            alignItems: 'center',
+          }}
+        >
+          {appointment.map((app, index) => (
+            <AppointmentItem
+              appointment={app}
+              key={index}
+              onPress={() => openModal(app.id)}
+            />
+          ))}
+        </ScrollView>
+      )}
+
       <Modal animationType="fade" visible={modal} transparent={true}>
         <ModalContainer>
           <ModalView
             style={{
-              shadowColor: "#000",
+              shadowColor: '#000',
               shadowOffset: {
                 width: 0,
                 height: 2,
@@ -130,18 +133,18 @@ export default function Appointment({ navigation, route }) {
             }}
           >
             <ModalTitle>Tem certeza?</ModalTitle>
-            <View style={{ flexDirection: "row" }}>
+            <View style={{ flexDirection: 'row' }}>
               <ModalButton
-                style={{ marginRight: 10, backgroundColor: "#7dc97f" }}
+                style={{ marginRight: 10, backgroundColor: '#7dc97f' }}
                 onPress={handleDeleteAppointment}
               >
-                <Text style={{ color: "#fff" }}>Sim</Text>
+                <Text style={{ color: '#fff' }}>Sim</Text>
               </ModalButton>
               <ModalButton
                 onPress={closeModal}
-                style={{ backgroundColor: "#ed5442" }}
+                style={{ backgroundColor: '#ed5442' }}
               >
-                <Text style={{ color: "#fff" }}>Não</Text>
+                <Text style={{ color: '#fff' }}>Não</Text>
               </ModalButton>
             </View>
           </ModalView>

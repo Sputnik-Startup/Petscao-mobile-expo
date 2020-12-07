@@ -4,7 +4,7 @@
       "statusBar": {
         "visible": true,
         "barStyle": "dark-content",
-        "backgroundColor": "#FFFFFF"
+        "backgroundColor": "#ffffff"
       }
     }
   },
@@ -22,7 +22,9 @@
       "versionCode": 1
     },
     "splash": {
-      "image": "./src/assets/splash.png"
+      "image": "./src/assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
     }
   }
 }

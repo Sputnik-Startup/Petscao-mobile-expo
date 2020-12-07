@@ -1,9 +1,9 @@
-import React from "react";
-import styled from "styled-components/native";
-import Icon from "react-native-vector-icons/FontAwesome5";
-import { View } from "react-native";
-import { format, parseISO } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import React from 'react';
+import styled from 'styled-components/native';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import { View } from 'react-native';
+import { format, parseISO } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 const ContainerItem = styled.View`
   width: 100%;
@@ -73,7 +73,7 @@ export default ({ appointment, onPress }) => {
   return (
     <ContainerItem
       style={{
-        shadowColor: "#000",
+        shadowColor: '#000',
         shadowOffset: {
           width: 0,
           height: 2,
@@ -96,13 +96,15 @@ export default ({ appointment, onPress }) => {
           })}
         </InfoData>
         <InfoData>
-          {appointment.descount ? "COM DESCONTO" : "SEM DESCONTO"}
+          {appointment.descount ? 'COM DESCONTO' : 'SEM DESCONTO'}
         </InfoData>
-        <ButtonsPet>
-          <DeleteButton onPress={onPress}>
-            <Icon name="trash" size={14} color="#fb6340" />
-          </DeleteButton>
-        </ButtonsPet>
+        {appointment.cancelable && (
+          <ButtonsPet>
+            <DeleteButton onPress={onPress}>
+              <Icon name="trash" size={14} color="#fb6340" />
+            </DeleteButton>
+          </ButtonsPet>
+        )}
       </InfoView>
     </ContainerItem>
   );

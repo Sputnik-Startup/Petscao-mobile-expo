@@ -1,6 +1,6 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
-import Icon from "react-native-vector-icons/FontAwesome5";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import {
   Container,
   ViewButtonAdd,
@@ -10,17 +10,18 @@ import {
   ModalContainer,
   ModalTitle,
   ModalView,
-} from "./styles";
+} from './styles';
 
-import { Alert } from "react-native";
-import { api } from "../../services/api";
+import { Alert } from 'react-native';
+import { api } from '../../services/api';
 
-import PetItem from "../../components/PetItem";
-import { ScrollView } from "react-native-gesture-handler";
-import { Modal, View, Text } from "react-native";
-import AsyncStorage from "@react-native-community/async-storage";
-import { UserContext } from "../../contexts/UserContext";
-import Loader from "../../components/Loader";
+import PetItem from '../../components/PetItem';
+import { ScrollView } from 'react-native-gesture-handler';
+import { Modal, View, Text } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+import { UserContext } from '../../contexts/UserContext';
+import Loader from '../../components/Loader';
+import Skeleton from './skeleton';
 
 export default ({ route }) => {
   const pet = route.params?.pet;
@@ -63,11 +64,11 @@ export default ({ route }) => {
 
   useEffect(() => {
     (async () => {
-      const token = await AsyncStorage.getItem("PC_TOKEN");
+      const token = await AsyncStorage.getItem('PC_TOKEN');
       try {
         const response = await api({
-          method: "get",
-          url: "/customer/pet",
+          method: 'get',
+          url: '/customer/pet',
           headers: {
             authorization: `Bearer ${token}`,
           },
@@ -84,12 +85,12 @@ export default ({ route }) => {
   const navigation = useNavigation();
 
   const handleClick = () => {
-    navigation.navigate("NewPet");
+    navigation.navigate('NewPet');
   };
 
   const handleDeletePet = async () => {
     api({
-      method: "delete",
+      method: 'delete',
       url: `/customer/pet/${selectedPet}`,
       headers: {
         authorization: `Bearer ${user.token}`,
@@ -108,25 +109,28 @@ export default ({ route }) => {
           <TextButton onPress={() => handleClick()}>Adicionar Pet</TextButton>
         </ButtonNewPet>
       </ViewButtonAdd>
-      {loading && <Loader />}
-      <ScrollView
-        contentContainerStyle={{
-          paddingVertical: 15,
-          alignItems: "flex-start",
-          justifyContent: "flex-start",
-          flexDirection: "row",
-          flexWrap: "wrap",
-        }}
-      >
-        {pets.map((pet) => (
-          <PetItem pet={pet} key={pet.id} onPress={openModal} />
-        ))}
-      </ScrollView>
+      {loading ? (
+        <Skeleton />
+      ) : (
+        <ScrollView
+          contentContainerStyle={{
+            paddingVertical: 15,
+            alignItems: 'flex-start',
+            justifyContent: 'flex-start',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+          }}
+        >
+          {pets.map((pet) => (
+            <PetItem pet={pet} key={pet.id} onPress={openModal} />
+          ))}
+        </ScrollView>
+      )}
       <Modal animationType="fade" visible={modal} transparent={true}>
         <ModalContainer>
           <ModalView
             style={{
-              shadowColor: "#000",
+              shadowColor: '#000',
               shadowOffset: {
                 width: 0,
                 height: 2,
@@ -137,18 +141,18 @@ export default ({ route }) => {
             }}
           >
             <ModalTitle>Tem certeza?</ModalTitle>
-            <View style={{ flexDirection: "row" }}>
+            <View style={{ flexDirection: 'row' }}>
               <ModalButton
-                style={{ marginRight: 10, backgroundColor: "#7dc97f" }}
+                style={{ marginRight: 10, backgroundColor: '#7dc97f' }}
                 onPress={handleDeletePet}
               >
-                <Text style={{ color: "#fff" }}>Sim</Text>
+                <Text style={{ color: '#fff' }}>Sim</Text>
               </ModalButton>
               <ModalButton
                 onPress={closeModal}
-                style={{ backgroundColor: "#ed5442" }}
+                style={{ backgroundColor: '#ed5442' }}
               >
-                <Text style={{ color: "#fff" }}>Não</Text>
+                <Text style={{ color: '#fff' }}>Não</Text>
               </ModalButton>
             </View>
           </ModalView>
