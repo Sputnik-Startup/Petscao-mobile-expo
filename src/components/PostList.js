@@ -1,17 +1,17 @@
-import React, { useContext, useEffect, useState } from "react";
-import styled from "styled-components/native";
-import { useNavigation } from "@react-navigation/native";
-import IconFa from "react-native-vector-icons/FontAwesome5";
-import { parseISO, formatRelative } from "date-fns";
+import React, { useContext, useEffect, useState } from 'react';
+import styled from 'styled-components/native';
+import { useNavigation } from '@react-navigation/native';
+import IconFa from 'react-native-vector-icons/FontAwesome5';
+import { parseISO, formatDistance } from 'date-fns';
 
-import AutoImage from "react-native-auto-height-image";
-import { Dimensions, Image, TouchableOpacity, View } from "react-native";
+import AutoImage from 'react-native-auto-height-image';
+import { Dimensions, Image, TouchableOpacity, View } from 'react-native';
 
-import Verified from "../assets/verified.png";
-import { api } from "../services/api";
-import AsyncStorage from "@react-native-community/async-storage";
-import { ptBR } from "date-fns/locale";
-import { UserContext } from "../contexts/UserContext";
+import Verified from '../assets/verified.png';
+import { api } from '../services/api';
+import AsyncStorage from '@react-native-community/async-storage';
+import { ptBR } from 'date-fns/locale';
+import { UserContext } from '../contexts/UserContext';
 
 const PostView = styled.View`
   width: 100%;
@@ -48,7 +48,7 @@ const DateNews = styled.Text`
 `;
 
 const PostImage = styled.Image`
-  width: ${Dimensions.get("screen").width};
+  width: ${Dimensions.get('screen').width};
   height: 200px;
   margin-top: 5px;
 `;
@@ -108,7 +108,7 @@ export default function PostList({
   const handleLike = () => {
     if (post.isLiked) {
       api({
-        method: "delete",
+        method: 'delete',
         url: `/customer/post/like?p=${post.id}`,
         headers: {
           authorization: `Bearer ${user.token}`,
@@ -121,7 +121,7 @@ export default function PostList({
       });
     } else {
       api({
-        method: "post",
+        method: 'post',
         url: `/customer/post/like?p=${post.id}`,
         headers: {
           authorization: `Bearer ${user.token}`,
@@ -136,23 +136,23 @@ export default function PostList({
       <HeaderPost>
         <ProfileImage source={{ uri: post?.employee.avatar.devMobileUrl }} />
         <PostInfo>
-          <View style={{ alignItems: "center", flexDirection: "row" }}>
+          <View style={{ alignItems: 'center', flexDirection: 'row' }}>
             <TitleNews>{post?.employee.name}</TitleNews>
             <Image
               source={Verified}
-              style={{ width: 15, height: 15, resizeMode: "contain" }}
+              style={{ width: 15, height: 15, resizeMode: 'contain' }}
             />
           </View>
           <DateNews>
-            Equipe Petscão -{" "}
-            {formatRelative(parseISO(post?.createdAt), new Date(), {
+            Equipe Petscão -{' '}
+            {formatDistance(parseISO(post?.createdAt), new Date(), {
               locale: ptBR,
             })}
           </DateNews>
         </PostInfo>
       </HeaderPost>
       <AutoImage
-        width={Dimensions.get("window").width}
+        width={Dimensions.get('window').width}
         source={{ uri: post.midia.devMobileUrl }}
         maxHeight={350}
       />
@@ -164,18 +164,18 @@ export default function PostList({
             <IconFa name="heart" size={20} color="#fb6340" regular />
           )}
         </TouchableOpacity>
-        <Reaction style={{ color: post.isLiked ? "#fb6340" : "#7A8FA6" }}>
-          {post.likes.length.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+        <Reaction style={{ color: post.isLiked ? '#fb6340' : '#7A8FA6' }}>
+          {post.likes.length.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
         </Reaction>
         {!withoutComments && (
           <>
             <TouchableOpacity style={{ marginRight: 10 }} onPress={onOpenPost}>
               <IconFa name="comment-alt" size={20} color="#7A8FA6" solid />
             </TouchableOpacity>
-            <Reaction style={{ color: "#7A8FA6" }}>
+            <Reaction style={{ color: '#7A8FA6' }}>
               {post.comments.length
                 .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+                .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
             </Reaction>
           </>
         )}
