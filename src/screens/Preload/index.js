@@ -1,10 +1,10 @@
-import React, { useContext, useEffect } from "react";
-import AsyncStorage from "@react-native-community/async-storage";
-import { useNavigation } from "@react-navigation/native";
+import React, { useContext, useEffect } from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
-import { api } from "../../services/api";
-import { UserContext } from "../../contexts/UserContext";
-import * as SplashScreen from "expo-splash-screen";
+import { api } from '../../services/api';
+import { UserContext } from '../../contexts/UserContext';
+import * as SplashScreen from 'expo-splash-screen';
 
 export default () => {
   const navigation = useNavigation();
@@ -21,31 +21,32 @@ export default () => {
   }
   const checkToken = async () => {
     const token = await AsyncStorage.getItem(
-      "PC_TOKEN"
+      'PC_TOKEN'
     ); /*Pega o Token do app*/
 
     if (token) {
       try {
         const me = await api({
-          method: "get",
-          url: "/customer/me",
+          method: 'get',
+          url: '/customer/me',
           headers: {
             authorization: `Bearer ${token}`,
           },
         });
 
         dispatch({
-          type: "@user/SET_ALL",
+          type: '@user/SET_ALL',
           payload: { user: me.data, token },
         });
         await SplashScreen.hideAsync();
-        navigation.replace("MainTab");
+        navigation.replace('MainTab');
       } catch (error) {
-        alert(error.response?.data.error || error.message);
+        await SplashScreen.hideAsync();
+        navigation.replace('SignIn', { noConnection: true });
       }
     } else {
       await SplashScreen.hideAsync();
-      navigation.replace("SignIn");
+      navigation.replace('SignIn');
     }
   };
 

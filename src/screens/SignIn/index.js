@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState } from 'react';
 
 import {
   ImageBackground,
@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Dimensions,
   AsyncStorage,
-} from "react-native";
+} from 'react-native';
 import {
   Container,
   InputArea,
@@ -15,31 +15,39 @@ import {
   SignMessageButton,
   SignMessageButtonText,
   SignMessageButtonTextBold,
-} from "./styles";
+  NoConnection,
+  NoConnectionText,
+} from './styles';
 
-import bg from "../../assets/bg.png";
+import bg from '../../assets/bg.png';
 
-import logo from "../../assets/logo.png";
+import logo from '../../assets/logo.png';
 
-import SignInput from "../../components/SignInput";
-import { api } from "../../services/api";
-import { UserContext } from "../../contexts/UserContext";
+import SignInput from '../../components/SignInput';
+import { api } from '../../services/api';
+import { UserContext } from '../../contexts/UserContext';
 
-export default ({ navigation }) => {
-  const [emailField, setEmailField] = useState("");
-  const [passwordField, setPasswordField] = useState("");
+export default ({ navigation, route }) => {
+  const [emailField, setEmailField] = useState('');
+  const [passwordField, setPasswordField] = useState('');
 
   const { handleSignin } = useContext(UserContext);
 
   const handleMessageButtonClick = () => {
-    {
-      /*envia o usuário para a tela de cadastro, sem a possibilidade de voltar*/
-    }
-    navigation.navigate("SignUp");
+    navigation.navigate('SignUp', {
+      noConnection: !!route.params?.noConnection,
+    });
   };
 
   return (
     <Container>
+      {route.params?.noConnection && (
+        <NoConnection>
+          <NoConnectionText>
+            Não conseguimos conectar com o servidor
+          </NoConnectionText>
+        </NoConnection>
+      )}
       <ImageBackground source={bg} style={styles.bg}>
         <InputArea>
           <Image source={logo} style={styles.logo} />
@@ -59,7 +67,12 @@ export default ({ navigation }) => {
           />
 
           <CustomButton
-            onPress={() => handleSignin(emailField, passwordField, navigation)}
+            onPress={() =>
+              !route.params?.noConnection &&
+              handleSignin(emailField, passwordField, navigation)
+            }
+            style={{ opacity: route.params?.noConnection ? 0.5 : 1 }}
+            disabled={!!route.params?.noConnection}
           >
             <CustomButtonText>Entrar</CustomButtonText>
           </CustomButton>
@@ -82,11 +95,11 @@ const styles = StyleSheet.create({
 
   bg: {
     flex: 1,
-    position: "absolute",
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
+    position: 'absolute',
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
     paddingHorizontal: 20,
     paddingVertical: 50,
-    alignItems: "center",
+    alignItems: 'center',
   },
 });

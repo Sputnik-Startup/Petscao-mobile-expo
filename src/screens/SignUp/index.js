@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
-import { ImageBackground, Image, StyleSheet, Dimensions } from "react-native";
+import { ImageBackground, Image, StyleSheet, Dimensions } from 'react-native';
 
 import {
   Container,
@@ -11,29 +11,38 @@ import {
   SignMessageButton,
   SignMessageButtonText,
   SignMessageButtonTextBold,
-} from "./styles";
+  NoConnection,
+  NoConnectionText,
+} from './styles';
 
-import logo from "../../assets/logo.png";
+import logo from '../../assets/logo.png';
 
-import bg from "../../assets/bg.png";
+import bg from '../../assets/bg.png';
 
-import SignInput from "../../components/SignInput";
+import SignInput from '../../components/SignInput';
 
-export default ({ navigation }) => {
-  const [name, setName] = useState("");
+export default ({ navigation, route }) => {
+  const [name, setName] = useState('');
 
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
 
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState('');
 
   const handleMessageButtonClick = () => {
-    navigation.navigate("SignIn");
+    navigation.navigate('SignIn');
   };
 
   async function handleSubmit() {}
 
   return (
     <Container>
+      {route.params?.noConnection && (
+        <NoConnection>
+          <NoConnectionText>
+            Não conseguimos conectar com o servidor
+          </NoConnectionText>
+        </NoConnection>
+      )}
       <ImageBackground source={bg} style={styles.bg}>
         <InputArea>
           <Image source={logo} style={styles.logo} />
@@ -53,7 +62,11 @@ export default ({ navigation }) => {
             password={true}
           />
 
-          <CustomButton onPress={handleSubmit}>
+          <CustomButton
+            onPress={handleSubmit}
+            style={{ opacity: route.params?.noConnection ? 0.5 : 1 }}
+            disabled={!!route.params?.noConnection}
+          >
             <CustomButtonText>Próximo</CustomButtonText>
           </CustomButton>
         </InputArea>
@@ -72,11 +85,11 @@ const styles = StyleSheet.create({
   },
   bg: {
     flex: 1,
-    position: "absolute",
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
+    position: 'absolute',
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
     paddingHorizontal: 20,
     paddingVertical: 50,
-    alignItems: "center",
+    alignItems: 'center',
   },
 });
